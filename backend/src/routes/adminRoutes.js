@@ -43,8 +43,10 @@ router.use(adminMiddleware);
 router.get('/all-exams', async (req, res) => {
     try {
         const result = await db.execute('SELECT * FROM exams ORDER BY startTime DESC');
+        console.log(`Fetched ${result.rows.length} exams for admin`);
         res.json(result.rows);
     } catch (err) {
+        console.error('Error fetching all exams:', err);
         res.status(500).json({ message: err.message });
     }
 });
