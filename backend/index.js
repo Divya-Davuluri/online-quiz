@@ -15,7 +15,15 @@ app.use('/uploads', express.static('uploads'));
 
 // Initialize DB
 (async () => {
-    await initDb();
+    try {
+        await initDb();
+        console.log('--- DATABASE STATUS ---');
+        console.log('Mode:', process.env.TURSO_URL ? 'Cloud (Turso)' : 'Local (SQLite)');
+        console.log('URL:', process.env.TURSO_URL || 'Local File');
+        console.log('-----------------------');
+    } catch (err) {
+        console.error('Database failed to initialize:', err);
+    }
 })();
 
 // Routes
