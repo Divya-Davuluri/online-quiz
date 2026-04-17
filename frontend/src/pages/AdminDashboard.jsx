@@ -59,9 +59,9 @@ const AdminDashboard = () => {
     }, []);
 
     const statCards = [
-        { label: 'Total Exams', value: stats.totalExams, icon: <FileText className="text-blue-500" />, color: 'bg-blue-500/10' },
-        { label: 'Total Students', value: stats.totalStudents, icon: <Users className="text-purple-500" />, color: 'bg-purple-500/10' },
-        { label: 'Submissions', value: stats.totalSubmissions, icon: <CheckCircle2 className="text-green-500" />, color: 'bg-green-500/10' },
+        { label: 'Total Exams', value: stats.totalExams, icon: <FileText className="text-blue-500" />, color: 'bg-blue-500/10', onClick: () => navigate('/admin/exams') },
+        { label: 'Total Students', value: stats.totalStudents, icon: <Users className="text-purple-500" />, color: 'bg-purple-500/10', onClick: () => navigate('/admin/students') },
+        { label: 'Submissions', value: stats.totalSubmissions, icon: <CheckCircle2 className="text-green-500" />, color: 'bg-green-500/10', onClick: () => navigate('/admin/reports') },
         { label: 'Ongoing', value: stats.ongoingExams || 0, icon: <Clock className="text-amber-500" />, color: 'bg-amber-500/10' },
     ];
 
@@ -131,7 +131,11 @@ const AdminDashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((card, i) => (
-                    <div key={i} className="glass-card p-6 flex items-center gap-4 border-none shadow-sm">
+                    <div 
+                        key={i} 
+                        onClick={card.onClick}
+                        className={`glass-card p-6 flex items-center gap-4 border-none shadow-sm ${card.onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-95 transition-all duration-200' : ''}`}
+                    >
                         <div className={`w-12 h-12 rounded-2xl ${card.color} flex items-center justify-center`}>
                             {card.icon}
                         </div>
@@ -167,8 +171,8 @@ const AdminDashboard = () => {
                                         <p className="text-[10px] text-gray-500 truncate">{sub.examTitle}</p>
                                     </div>
                                 </div>
-                                <div className="text-right flex flex-col items-end">
-                                    <p className="text-sm font-bold text-green-500">85%</p>
+                                 <div className="text-right flex flex-col items-end">
+                                    <p className="text-sm font-bold text-green-500">{sub.score !== null ? `${sub.score}%` : 'Pending'}</p>
                                     <button 
                                         onClick={() => navigate(`/admin/submissions/${sub.id}/review`)}
                                         className="text-[10px] text-primary-600 font-bold hover:underline"
