@@ -7,7 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+        console.log('Incoming request from origin:', origin);
+        callback(null, true);
+    },
     credentials: true
 }));
 app.use(express.json());
