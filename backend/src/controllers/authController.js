@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
             args: [userId, name, email, hashedPassword, role || 'student']
         });
 
-        const token = jwt.sign({ id: userId, role: role || 'student' }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: userId, role: role || 'student' }, process.env.JWT_SECRET || 'supersecret123', { expiresIn: '1d' });
         res.status(201).json({ token, user: { id: userId, name, email, role: role || 'student' } });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'supersecret123', { expiresIn: '1d' });
         res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -67,7 +67,7 @@ exports.googleLogin = async (req, res) => {
             user = { id: userId, name, email, role: 'student' };
         }
 
-        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'supersecret123', { expiresIn: '1d' });
         res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         res.status(500).json({ message: err.message });
